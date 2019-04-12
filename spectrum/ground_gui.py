@@ -153,7 +153,8 @@ def fftp():
     ft.connect(('192.168.3.120',10103))
     print('fft connect successful')
     x=[]
-    plt.axis([0, 8192, 0, 500000000])
+    
+    #plt.axis([0, 8192, 0, 500000000])
     xz = np.linspace(88, 118, 8192) #X axis data
     time=0
     temp_list=[]
@@ -189,10 +190,10 @@ def fftp():
                     keyi_Window.delete(0.1,"end")
                     while i<l:
                         keyi_Window.insert("end",str(freq_list[i])+'\n')
-                        #keyi_Window.see("end")
                         i +=1
                 x=10*np.log10(x)
                  #xiugaide==================================================
+                plt.figure(2)
                 plt.clf()
                 plt.xlabel('Frequency/MHz')
                 plt.xlim((88,118))
@@ -201,7 +202,7 @@ def fftp():
                 plt.pause(0.01)
             x=[]
         elif data==b'\xaa\xbb\xcc\xdd':#图片显示关闭
-            plt.close()
+            plt.close(2)
             bufcount=1000#处理掉没处理的数据
             while bufcount:
                 data=ft.recv(4)
