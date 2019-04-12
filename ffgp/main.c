@@ -65,17 +65,17 @@ void get_client()
 {
 	while (1&&fft_cli_num<MAX_CLI&&fm_cli_num<MAX_CLI)
 	{
-		printf("waitting for other client \n");
+		printf("waitting for other client %d  %d\n",fft_cli_num,fm_cli_num);
         fmdst=accept(fmsock,(struct sockaddr*)&their_addr,&sin_size);
 		if(fmdst)
 		{
-			fm_cli[fm_cli_num++]=fftdst;
+			fm_cli[fm_cli_num++]=fmdst;
 			printf("find fm client %d\n",fmdst);
 		}
         fftdst=accept(fftsock,(struct sockaddr*)&fft_their,&sin_size);
 		if(fftdst)
 		{
-			fft_cli[fft_cli_num++]=fmdst;
+			fft_cli[fft_cli_num++]=fftdst;
 			printf("find fft client %d\n",fftdst);
 		}
 	}
@@ -120,9 +120,9 @@ void control_process(void *arg)
 				write_devattr_int("out_altvoltage0_RX_LO_frequency", data*100000+88000000);//data*0.1M +88M
 				break;//set fm freq
 			}
-			case 3:((int *)arg)[1]=2;break;//start fmod 
-			case 4:((int *)arg)[1]=1;break;//start fft
-			case 5:((int *)arg)[1]=0;send(fftdst,"\xaa\xbb\xcc\xdd",4,0);break;//kill sub
+			case 3:fm_cli_num>0?((int *)arg)[1]=2:printf("no client");break;//start fmod 
+			case 4:fft_cli_num>0?((int *)arg)[1]=1:printf("no client");break;//start fft
+			case 5:((int *)arg)[1]=0;gsend(fft_cli,"\xaa\xbb\xcc\xdd",4,fft_cli_num);break;//kill sub
 			case 6:((int *)arg)[0]=0;exit(0);break;//kill all
 			case 7:
 			{

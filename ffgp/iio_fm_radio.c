@@ -11,7 +11,7 @@
 
 
 
-static int demodulate(struct iio_buffer_block *block,int dst,int cnum)
+static int demodulate(struct iio_buffer_block *block,int* dst,int cnum)
 {
 	int new_min, new_max;
 	long i[3], q[3], di, dq;
